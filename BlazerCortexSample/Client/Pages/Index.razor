@@ -1,0 +1,34 @@
+﻿@page "/"
+@inject TodoStore TodoStore
+
+@attribute [Observer]
+
+<div>
+    <div>Total Completed: @TodoStore.CompletedCount </div>
+    <div>Total Active: @TodoStore.ActiveCount </div>
+</div>
+
+<br />
+
+<AddTodo />
+
+<br />
+
+<br />
+
+<TodoOverview />
+
+@code
+    {
+    protected override void OnInitialized()
+    {
+        // NB: Without adding individual item to the store the tracking doesn't work ...
+        // Even loading the Todos Inside the Store not working
+
+        this.TodoStore.AddTodo(new Todo() { Id = Guid.NewGuid(), Completed = false, Title = "Todo 1", Store = this.TodoStore });
+        this.TodoStore.AddTodo(new Todo() { Id = Guid.NewGuid(), Completed = true, Title = "Todo 2", Store = this.TodoStore });
+        this.TodoStore.AddTodo(new Todo() { Id = Guid.NewGuid(), Completed = false, Title = "Todo 3", Store = this.TodoStore });
+        this.TodoStore.AddTodo(new Todo() { Id = Guid.NewGuid(), Completed = false, Title = "Todo 4", Store = this.TodoStore });
+        this.TodoStore.AddTodo(new Todo() { Id = Guid.NewGuid(), Completed = false, Title = "Todo 5", Store = this.TodoStore });
+    }
+}

@@ -1,0 +1,36 @@
+﻿@using  Cortex.Net.Blazor
+
+@*@attribute [Observer]*@
+@inject TodoStore TodoStore
+
+<input class="new-todo" @bind-value="Title" @bind-value:event="oninput" placeholder="What needs to be done?" @onkeydown="HandleKeyDown" autofocus />
+
+@code {
+
+    /// <summary>
+    /// Gets or sets the Title.
+    /// </summary>
+    public string Title { get; set; }
+
+    /// <summary>
+    /// Handles the key down event.
+    /// </summary>
+    /// <param name="args">The keyboard event arguments.</param>
+    public void HandleKeyDown(KeyboardEventArgs args)
+    {
+        if (args.Key != "Enter")
+        {
+            return;
+        }
+
+        var val = this.Title?.Trim();
+
+        if (!string.IsNullOrEmpty(val))
+        {
+            this.TodoStore.AddTodo(val);
+            this.Title = "";
+
+            Console.WriteLine("New Todo Added!");
+        }
+    }
+}
