@@ -16,19 +16,28 @@
 
 <br />
 
-<TodoOverview />
+<TodoOverview Todos="this.TodoStore.Todos.ToList()" />
 
 @code
-    {
-    protected override void OnInitialized()
-    {
-        // NB: Without adding individual item to the store the tracking doesn't work ...
-        // Even loading the Todos Inside the Store not working
+{
 
-        this.TodoStore.AddTodo(new Todo() { Id = Guid.NewGuid(), Completed = false, Title = "Todo 1", Store = this.TodoStore });
-        this.TodoStore.AddTodo(new Todo() { Id = Guid.NewGuid(), Completed = true, Title = "Todo 2", Store = this.TodoStore });
-        this.TodoStore.AddTodo(new Todo() { Id = Guid.NewGuid(), Completed = false, Title = "Todo 3", Store = this.TodoStore });
-        this.TodoStore.AddTodo(new Todo() { Id = Guid.NewGuid(), Completed = false, Title = "Todo 4", Store = this.TodoStore });
-        this.TodoStore.AddTodo(new Todo() { Id = Guid.NewGuid(), Completed = false, Title = "Todo 5", Store = this.TodoStore });
+
+    //protected override OnInitialized()
+    //{
+    //    // NB: Without adding individual item to the store the tracking doesn't work ...
+    //    // Even loading the Todos Inside the Store not working
+
+    //    //this.TodoStore.AddTodo(new Todo() { Id = Guid.NewGuid(), Completed = false, Title = "Todo 1", Store = this.TodoStore });
+    //    //this.TodoStore.AddTodo(new Todo() { Id = Guid.NewGuid(), Completed = true, Title = "Todo 2", Store = this.TodoStore });
+    //    //this.TodoStore.AddTodo(new Todo() { Id = Guid.NewGuid(), Completed = false, Title = "Todo 3", Store = this.TodoStore });
+    //    //this.TodoStore.AddTodo(new Todo() { Id = Guid.NewGuid(), Completed = false, Title = "Todo 4", Store = this.TodoStore });
+    //    //this.TodoStore.AddTodo(new Todo() { Id = Guid.NewGuid(), Completed = false, Title = "Todo 5", Store = this.TodoStore });
+
+
+    //}
+
+    protected override async Task OnInitializedAsync()
+    {
+        await TodoStore.LoadTodos();
     }
 }

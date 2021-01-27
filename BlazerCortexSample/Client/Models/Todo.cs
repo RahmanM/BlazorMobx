@@ -1,6 +1,7 @@
 ﻿namespace BlazerCortexSample.Client.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.Text.Json.Serialization;
     using BlazerCortexSample.Client.Store;
     using Cortex.Net.Api;
@@ -19,7 +20,7 @@
         /// <summary>
         /// Gets or sets the Id.
         /// </summary>
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// Gets or sets the Title.
@@ -32,6 +33,12 @@
         /// </summary>
         [Observable]
         public bool Completed { get; set; }
+
+        [Observable]
+
+        public int UserId { get; set; }
+
+        public string UserName { get; set; }
 
         /// <summary>
         /// Toggles this item for completion.
@@ -49,6 +56,15 @@
         {
             this.Store.Todos.Remove(this);
         }
+    }
+
+    public class User
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+
     }
 
     /// <summary>

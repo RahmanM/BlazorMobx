@@ -3,6 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
+    using BlazerCortexSample.Client.Data;
     using BlazerCortexSample.Client.Models;
     using Cortex.Net.Api;
 
@@ -13,12 +15,9 @@
     public class TodoStore
     {
 
-        public TodoStore()
+        public TodoStore(ITodoService todoService)
         {
-            //if(this.Todos == null || this.Todos.Count == 0)
-            //{
-            //    this.LoadTodos();
-            //}
+            TodoService = todoService;
         }
 
         /// <summary>
@@ -39,36 +38,47 @@
         [Computed]
         public int CompletedCount => this.Todos.Count - this.ActiveCount;
 
+        [Computed]
+        public Dictionary<string, int> UsersTodosCount => 
+            Todos.GroupBy(g => g.UserName)
+            .Select(t => new { User = t.Key, TodoCount = t.Count() })
+            .ToDictionary(pair => pair.User ?? "Unknown User", pair => pair.TodoCount);
+
+        public ITodoService TodoService { get; }
+
         /// <summary>
         /// Adds a todo item to the Store.
         /// </summary>
         /// <param name="title">The title of the new Todo item.</param>
         [Action]
-        public void AddTodo(string title)
+        public void AddTodo(string title, string userId)
         {
+            TodoService.AddTodo(title);
+
+            var user = Todos.Where(u => u.UserName == userId).FirstOrDefault();
+
             var newTodo = new Todo()
             {
-                Id = Guid.NewGuid(),
+                Id = Todos.Count + 1,
                 Title = title,
                 Completed = false,
                 Store = this,
+                UserId = user.UserId,
+                UserName = user.UserName
             };
-            this.Todos.Add(newTodo);
+
+            this.Todos.Insert(0, newTodo);
         }
 
-        [Action]
-        public void AddTodo(Todo todo)
-        {
-            this.Todos.Add(todo);
-        }
-
-        /// <summary>
+          /// <summary>
         /// Toggles all items to the new completed state.
         /// </summary>
         /// <param name="completed">Whether the todo item is completed.</param>
         [Action]
         public void ToggleAll(bool completed)
         {
+            TodoService.ToggleAll(completed);
+
             foreach (var todo in this.Todos)
             {
                 todo.Completed = completed;
@@ -81,6 +91,8 @@
         [Action]
         public void ClearCompleted()
         {
+            TodoService.ClearCompleted();
+
             foreach (var completedItem in this.Todos.Where(x => x.Completed).ToList())
             {
                 this.Todos.Remove(completedItem);
@@ -88,19 +100,26 @@
         }
 
 
-        // NOTE: This won't work e.g. will loadd todos the computed will work but adding new Todos won't show the list
         [Action]
-        public void LoadTodos()
+        public async Task LoadTodos()
         {
-            var todos = new List<Todo>();
-            todos.Add(new Todo() { Id = Guid.NewGuid(), Completed = false, Title = "Todo 1", Store = this });
-            todos.Add(new Todo() { Id = Guid.NewGuid(), Completed = true, Title = "Todo 2", Store = this });
-            todos.Add(new Todo() { Id = Guid.NewGuid(), Completed = false, Title = "Todo 3", Store = this });
-            todos.Add(new Todo() { Id = Guid.NewGuid(), Completed = false, Title = "Todo 4", Store = this });
-            todos.Add(new Todo() { Id = Guid.NewGuid(), Completed = false, Title = "Todo 5", Store = this });
+            var todos = await TodoService.LoadTodos();
 
+            foreach (var todo in todos)
+            {
+                var newTodo = new Todo()
+                {
+                    Id = todo.Id,
+                    Title = todo.Title,
+                    Completed = todo.Completed,
+                    Store = this,
+                    UserId = todo.UserId,
+                    UserName = todo.UserName
+                };
 
-            this.Todos = todos;
+                this.Todos.Add(newTodo);
+            }
+            
         }
     }
 }

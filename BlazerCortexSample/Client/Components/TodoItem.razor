@@ -8,7 +8,10 @@
 <li class="@(this.Todo.Completed?"completed":"") @(this.Todo == ViewStore.TodoBeingEdited?"editing":"")">
     <div class="view">
         <input class="toggle" type="checkbox" checked="@this.Todo.Completed" @onchange="Toggle">
-        <label @ondblclick="DoubleClick">@this.Todo.Title</label>
+
+        <label @ondblclick="DoubleClick">
+            <span>@this.Todo.UserName</span>  ->  @this.Todo.Title
+        </label>
         <button class="destroy" @onclick="Destroy"></button>
     </div>
     <input class="edit" @bind-value="editText" @onblur="Submit" @onkeydown="KeyDown">
