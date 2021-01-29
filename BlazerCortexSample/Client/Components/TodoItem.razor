@@ -10,7 +10,7 @@
         <input class="toggle" type="checkbox" checked="@this.Todo.Completed" @onchange="Toggle">
 
         <label @ondblclick="DoubleClick">
-            <span>@this.Todo.UserName</span>  ->  @this.Todo.Title
+            <span class="user-info">@this.Todo.UserName</span>   @this.Todo.Title
         </label>
         <button class="destroy" @onclick="Destroy"></button>
     </div>

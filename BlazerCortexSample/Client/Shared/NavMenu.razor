@@ -34,6 +34,7 @@
 <br />
 
 <div style="color:white; font-weight:bold; background-color:blueviolet; padding:10px">
+    <h2>Todo Status</h2>
     <div>Total Completed: @TodoStore.CompletedCount </div>
     <div>Total Active: @TodoStore.ActiveCount </div>
 </div>
@@ -42,6 +43,7 @@
 <br />
 
 <div style="color:white; font-weight:bold; background-color:gold; padding:10px">
+    <h2>Todos By Users</h2>
     @foreach (var userTodo in TodoStore.UsersTodosCount)
     {
         <div>@userTodo.Key : @userTodo.Value </div>

@@ -40,7 +40,8 @@
 
         [Computed]
         public Dictionary<string, int> UsersTodosCount => 
-            Todos.GroupBy(g => g.UserName)
+            Todos.Where(t=> !t.Completed)
+            .GroupBy(g => g.UserName)
             .Select(t => new { User = t.Key, TodoCount = t.Count() })
             .ToDictionary(pair => pair.User ?? "Unknown User", pair => pair.TodoCount);
 

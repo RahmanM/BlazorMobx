@@ -10,18 +10,19 @@
 @if (TodoStore.Todos.Count > 0)
 {
     <!-- This section should be hidden by default and shown when there are todos -->
-    <section class="main">
-        <input id="toggle-all" class="toggle-all" type="checkbox" @onchange="ToggleAll" checked="@(this.TodoStore.ActiveCount == 0)" />
-        <label for="toggle-all">Mark all as complete</label>
-        <ul class="todo-list">
-            <!-- These are here just to show the structure of the list items -->
-            <!-- List items should get the class `editing` when editing and `completed` when marked as completed -->
-            @foreach (var todo in this.Todos)
-            {
-                <TodoItem @key="todo.Id" Todo="todo" />
-            }
-        </ul>
-    </section>
+<section class="main">
+    <input id="toggle-all" class="" type="checkbox" @onchange="ToggleAll" checked="@(this.TodoStore.ActiveCount == 0)" />
+    <label for="toggle-all">Mark all as complete</label>
+    <ul class="todo-list">
+        <!-- These are here just to show the structure of the list items -->
+        <!-- List items should get the class `editing` when editing and `completed` when marked as completed -->
+        @foreach (var todo in this.Todos)
+        {
+            <TodoItem @key="todo.Id" Todo="todo" />
+        }
+    </ul>
+
+</section>
 }
 
 @code
@@ -29,19 +30,6 @@
     [Parameter]
     public List<Todo> Todos { get; set; }
 
-    ///// <summary>
-    ///// Gets the visible Todos.
-    ///// </summary>
-    ///// <returns></returns>
-    //IEnumerable<Todo> GetVisibleTodos()
-    //{
-
-    //    if (this.ViewStore.TodoFilter == TodoFilter.All)
-    //    {
-    //        return this.TodoStore.Todos;
-    //    }
-    //    return this.TodoStore.Todos.Where(x => this.ViewStore.TodoFilter == TodoFilter.Completed ? x.Completed : !x.Completed);
-    //}
 
     /// <summary>
     /// Event handler for the toggle-all checkbox.
